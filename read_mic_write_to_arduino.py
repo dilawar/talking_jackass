@@ -38,7 +38,7 @@ def main( ):
     try:
         while True:
             h = datetime.datetime.now( )
-            if h.hour > 8 and h.hour < 17:
+            if h.hour > 8 and h.hour < 19:
                 val = record( frameT )
                 power = compute_power( val )
                 output = 'P' if power > 60 else '.'
