@@ -14,27 +14,26 @@
  *        License:  GNU GPL2
  */
 
-#define WINDOW_SIZE 20
+#define WINDOW_SIZE  200
 
-#define SOUND_VCC           5
-#define SOUND_GND           6
-#define SOUND_INPUT         7
+#define SOUND_INPUT_A       A0
+#define SOUND_INPUT_B       A1
 
-#define OUTPUT_PINS_START   2
-#define GROUND_PIN          8
-#define RECORD_PIN          9
-#define PLAY_PIN            11  // play by level.
+#define RECORD_PIN          4
+#define PLAY_PIN            6  // play by level
+
+#define RECORD_TIME         5000
 
 /**
  * @brief Keep the running values of signal.
  */
-int signal_[WINDOW_SIZE];
+unsigned int signal_[WINDOW_SIZE];
 
 /*  Running mean of signal. */
 float running_mean_ = 0.0;
 int pp1 = 10;
 
-unsigned int time = 0;
+unsigned long time = 0;
 
 // the setup routine runs once when you press reset:
 void setup()
@@ -42,19 +41,12 @@ void setup()
     // initialize serial communication at 9600 bits per second:
     Serial.begin( 38400 );
 
-    pinMode( SOUND_INPUT, OUTPUT );
-    pinMode( SOUND_VCC, OUTPUT );
-    pinMode( SOUND_INPUT, OUTPUT );
-
-    digitalWrite( SOUND_VCC, HIGH );
-    digitalWrite( SOUND_GND, LOW );
-
-    pinMode( GROUND_PIN, OUTPUT );
+    pinMode( SOUND_INPUT_A, INPUT );
+    pinMode( SOUND_INPUT_B, INPUT );
 
     pinMode( RECORD_PIN, OUTPUT );
     pinMode( PLAY_PIN, OUTPUT );
 
-    digitalWrite( GROUND_PIN, LOW );
     digitalWrite( RECORD_PIN, LOW );
 }
 
@@ -62,24 +54,39 @@ void setup()
 void loop() 
 {
     // read the input on analog pin 0:
-    time = millis( );
+    unsigned long time0 = millis( );
 
-    int sig = digitalRead( SOUND_INPUT );
-    Serial.println( sig );
+    time = millis( ) - time0;
+    unsigned stamp = millis( ) - time0;
 
-    if( time % 1000 == 0 )
+    digitalWrite( RECORD_PIN, HIGH );
+    delay( RECORD_TIME );
+
+    Serial.println( "Done recording. ..." );
+    digitalWrite( RECORD_PIN, LOW );
+    digitalWrite( PLAY_PIN, HIGH );
+    stamp = millis( ) - time0;
+
+    long sum = 0;
+    int a, b;
+    while( (millis( ) - stamp - time0) <= (RECORD_TIME + 100) )
     {
-        Serial.println( "1 sec over" );
-
-        // Start recording 
-        digitalWrite( RECORD_PIN, LOW );
-
-        // Delay for 100 ms.
-        delay( 100 );
+        b = analogRead( SOUND_INPUT_B );
+        a = analogRead( SOUND_INPUT_A );
+        //Serial.print( b ); Serial.print( ' ' ); Serial.println( a );
+        if( a < 1024 && b < 1024 )
+            sum += abs( b - a );
     }
-    else
+
+    stamp = millis( ) - time0;
+
+    if( sum > 500 )
     {
-        if( digitalRead( RECORD_PIN ) == LOW )
-            digitalWrite( RECORD_PIN, HIGH );
+        Serial.println( "Over the top. Annoy" );
     }
+
+    Serial.println( sum );
+    digitalWrite( PLAY_PIN, LOW );
+    digitalWrite( RECORD_PIN, LOW );
+
 }
