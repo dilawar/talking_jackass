@@ -14,79 +14,70 @@
  *        License:  GNU GPL2
  */
 
-#define WINDOW_SIZE  200
+int speakerPin = 9;
 
-#define SOUND_INPUT_A       A0
-#define SOUND_INPUT_B       A1
+int length = 15; // the number of notes
+char notes[] = "ccggaagffeeddc "; // a space represents a rest
+int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
+int tempo = 300;
 
-#define RECORD_PIN          4
-#define PLAY_PIN            6  // play by level
-
-#define RECORD_TIME         5000
-
-/**
- * @brief Keep the running values of signal.
- */
-unsigned int signal_[WINDOW_SIZE];
-
-/*  Running mean of signal. */
-float running_mean_ = 0.0;
-int pp1 = 10;
-
-unsigned long time = 0;
-
-// the setup routine runs once when you press reset:
-void setup()
+void playTone(int tone, int duration) 
 {
-    // initialize serial communication at 9600 bits per second:
+    for (long i = 0; i < duration * 1000L; i += tone * 2) {
+        digitalWrite(speakerPin, HIGH);
+        delayMicroseconds(tone);
+        digitalWrite(speakerPin, LOW);
+        delayMicroseconds(tone);
+    }
+}
+
+void playNote(char note, int duration) 
+{
+    char names[] = { 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C' };
+    int tones[] = { 1915, 1700, 1519, 1432, 1275, 1136, 1014, 956 };
+
+    // play the tone corresponding to the note name
+    for (int i = 0; i < 8; i++) 
+    {
+        if (names[i] == note) 
+        {
+            Serial.print( "Playing tone " );
+            Serial.println( note );
+            playTone(tones[i], duration);
+        }
+    }
+}
+
+void setup( )
+{
     Serial.begin( 38400 );
 
-    pinMode( SOUND_INPUT_A, INPUT );
-    pinMode( SOUND_INPUT_B, INPUT );
-
-    pinMode( RECORD_PIN, OUTPUT );
-    pinMode( PLAY_PIN, OUTPUT );
-
-    digitalWrite( RECORD_PIN, LOW );
+    pinMode( speakerPin, OUTPUT );
+    pinMode( 8, OUTPUT );
+    digitalWrite( 8, LOW );
 }
+
+void play( )
+{
+    char melody[] = "ccggaag ffeeddc";
+
+    for (size_t i = 0; i < 15; i++) 
+        playNote( melody[i], 400 );
+}
+
 
 // the loop routine runs over and over again forever:
 void loop() 
 {
-    // read the input on analog pin 0:
-    unsigned long time0 = millis( );
-
-    time = millis( ) - time0;
-    unsigned stamp = millis( ) - time0;
-
-    digitalWrite( RECORD_PIN, HIGH );
-    delay( RECORD_TIME );
-
-    Serial.println( "Done recording. ..." );
-    digitalWrite( RECORD_PIN, LOW );
-    digitalWrite( PLAY_PIN, HIGH );
-    stamp = millis( ) - time0;
-
-    long sum = 0;
-    int a, b;
-    while( (millis( ) - stamp - time0) <= (RECORD_TIME + 100) )
+    if( Serial.available( ) > 0)
     {
-        b = analogRead( SOUND_INPUT_B );
-        a = analogRead( SOUND_INPUT_A );
-        //Serial.print( b ); Serial.print( ' ' ); Serial.println( a );
-        if( a < 1024 && b < 1024 )
-            sum += abs( b - a );
+        int incoming = Serial.read( );
+        Serial.println( incoming );
+
+        if( incoming == 80 )
+        {
+            Serial.println( "Play notes" );
+            play( );
+        }
     }
-
-    stamp = millis( ) - time0;
-
-    if( sum > 500 )
-    {
-        Serial.println( "Over the top. Annoy" );
-    }
-
-    Serial.println( sum );
-    digitalWrite( PLAY_PIN, LOW );
-    digitalWrite( RECORD_PIN, LOW );
-
 }
