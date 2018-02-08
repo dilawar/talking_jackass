@@ -43,13 +43,14 @@ def main( ):
                 power = compute_power( val )
                 output = 'P' if power > 60 else '.'
                 print( power, output )
+                ser.write( output.encode( ) )
+                time.sleep( 10 )
             else:
-                print( 'not working hours' )
+                print( 'not in working hours' )
                 output = '.'
+                ser.write( output.encode( ) )
                 time.sleep( 10 )
 
-            ser.write( output.encode( ) )
-            time.sleep( 0.1 )
 
     except KeyboardInterrupt as e:
         print( "keyboad interrupt" )
