@@ -1,2 +1,5 @@
-# talking_jackass
-Annoying Arduino Utility : repeat what people are saying in neighbourhood
+# Talking Jackass
+
+Arduino controlled ISD1820.
+
+The purpose of this project is to annoy my noisy neighbours.
