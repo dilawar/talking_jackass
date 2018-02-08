@@ -44,7 +44,10 @@ def main( ):
                 output = 'P' if power > 60 else '.'
                 print( power, output )
             else:
+                print( 'not working hours' )
                 output = '.'
+                time.sleep( 10 )
+
             ser.write( output.encode( ) )
             time.sleep( 0.1 )
 
