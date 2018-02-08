@@ -17,6 +17,7 @@ import numpy as np
 import serial
 import time
 import sounddevice as sd 
+import datetime
 
 fs = 44100
 sd.default.samplerate = fs
@@ -36,13 +37,17 @@ def main( ):
     ser = serial.Serial( sys.argv[1], 38400, timeout = 0.5 )
     try:
         while True:
-            val = record( frameT )
-            power = compute_power( val )
-            output = 'P' if power > 60 else '.'
-            print( power, output )
+            h = datetime.datetime.now( )
+            if h.hour > 8 and h.hour < 17:
+                val = record( frameT )
+                power = compute_power( val )
+                output = 'P' if power > 60 else '.'
+                print( power, output )
+            else:
+                output = '.'
             ser.write( output.encode( ) )
             time.sleep( 0.1 )
-            # Write this power value to arduino.
+
     except KeyboardInterrupt as e:
         print( "keyboad interrupt" )
         ser.close()
