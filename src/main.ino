@@ -59,10 +59,10 @@ void setup( )
 
 void play( )
 {
-    char melody[] = "ccggaag ffeeddc";
+    char melody[] = "ccggaag";
 
     for (size_t i = 0; i < 15; i++) 
-        playNote( melody[i], 400 );
+        playNote( melody[i], 200 );
 }
 
 
