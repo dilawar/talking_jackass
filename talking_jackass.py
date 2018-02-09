@@ -46,7 +46,7 @@ def main( ):
                 ser.write( output.encode( ) )
                 time.sleep( 10 )
             else:
-                print( 'not in working hours' )
+                print( 'not during working hours' )
                 output = '.'
                 ser.write( output.encode( ) )
                 time.sleep( 10 )
