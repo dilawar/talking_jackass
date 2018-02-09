@@ -24,7 +24,7 @@ sd.default.samplerate = fs
 sd.default.channels = 1
 
 def compute_power( vec ):
-    w = np.sqrt( np.sum( vec ** 2 ) )
+    w = np.sqrt( np.sum( vec ** 2 ) ) / len(vec)
     return w
 
 def record( duration ):
@@ -33,30 +33,30 @@ def record( duration ):
     return vec
 
 def main( ):
-    frameT = 5
     ser = serial.Serial( sys.argv[1], 38400, timeout = 0.5 )
+    frameT = 10
     try:
         while True:
             h = datetime.datetime.now( )
             val = record( frameT )
             power = compute_power( val )
             if h.hour > 8 and h.hour < 19:
-                output = 'P' if power > 50 else '.'
+                output = ' P' if power > 50 else '.'
                 print( power )
                 ser.write( output.encode( ) )
-                time.sleep( 10 )
+                time.sleep( frameT )
             else:
                 print( 'not during working hours' )
                 output = '.'
                 ser.write( output.encode( ) )
-                time.sleep( 10 )
+                time.sleep( frameT )
 
             with open( '/tmp/mic_power', 'w' ) as f:
-                f.write( power )
+                f.write( '%.3f' % power )
 
             with open( '/var/run/log/jackass.csv', 'a' ) as f:
                 stamp = datetime.datetime.now().isoformat( )
-                f.write( '%s,%f\n' % (stamp, power ) )
+                f.write( '%s,%g\n' % (stamp, power ) )
 
 
     except KeyboardInterrupt as e:
