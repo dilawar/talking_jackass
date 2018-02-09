@@ -40,13 +40,11 @@ def find_notes( data ):
 
 def main( ):
     infile = sys.argv[1]
-    print( 'Processing %s' % infile )
     data = cv2.imread( infile, 0 )
     o = 100
     data = data[o:-o,o:-o]
-    notes, data = find_notes( data )
-    print( notes )
-    #cv2.imwrite( 'processed.png', data )
+    nn, data = find_notes( data )
+    print( '%d' % nn )
 
 if __name__ == '__main__':
     main()
