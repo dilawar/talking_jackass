@@ -34,7 +34,7 @@ def find_notes( data ):
             noteBegin = False
             nNotes += 1
 
-    return  nNotes, math.log( 1 + np.sum(ySum) )
+    return  nNotes, int(math.log( 1 + np.sum(ySum)))
 
 def main( ):
     infile = sys.argv[1]
@@ -42,7 +42,7 @@ def main( ):
     o = 100
     data = data[o:-o,o:-o]
     nn, totalP = find_notes( data )
-    print( '%d %.2f' % (nn, totalP) )
+    print( '%d %d' % (nn, totalP) )
 
 if __name__ == '__main__':
     main()
