@@ -27,7 +27,7 @@ DURATION=10
 NOISE_PROFILE=./noise_slc.prof
 
 while true; do
-    arecord -d $DURATION -t wav $OUTFILE
+    arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
