@@ -14,18 +14,39 @@ __status__           = "Development"
 
 import sys
 import os
-import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io.wavfile as wavfile
-import scipy.signal as sig
+import cv2
+
+def find_notes( data ):
+    nNotes = 0
+    u = data.mean( )
+    s = data.std( )
+    data[ data < u + 2*s ] = 0
+    #data = cv2.GaussianBlur( data, (3,3), 0 )
+    #edges = cv2.Canny( data, u, u+s )
+
+    # Now walk in time and check if note is there.
+    ySum = np.sum( data, axis = 0 )
+
+    noteBegin = False
+    for i, v in enumerate( ySum ):
+        if not noteBegin and v > 0:
+            noteBegin = True
+        elif noteBegin and v == 0:
+            noteBegin = False
+            nNotes += 1
+
+    return  nNotes, np.vstack( (data, ySum) )
 
 def main( ):
     infile = sys.argv[1]
     print( 'Processing %s' % infile )
-    sample_rate, samples = wavfile.read( infile )
-    frequencies, times, spectogram = sig.spectrogram(samples, sample_rate)
-    plt.imshow(spectogram , aspect = 'auto' )
-    plt.savefig( 'spec.png' )
+    data = cv2.imread( infile, 0 )
+    o = 100
+    data = data[o:-o,o:-o]
+    notes, data = find_notes( data )
+    print( notes )
+    #cv2.imwrite( 'processed.png', data )
 
 if __name__ == '__main__':
     main()
