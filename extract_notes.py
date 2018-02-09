@@ -16,19 +16,20 @@ import sys
 import os
 import numpy as np
 import cv2
+import math
 
 def find_notes( data ):
     nNotes = 0
     u = data.mean( )
     s = data.std( )
     data[ data < u + 2*s ] = 0
-    #data = cv2.GaussianBlur( data, (3,3), 0 )
-    #edges = cv2.Canny( data, u, u+s )
 
     # Now walk in time and check if note is there.
     ySum = np.sum( data, axis = 0 )
+    totalPower = np.sum( ySum )
 
     noteBegin = False
+
     for i, v in enumerate( ySum ):
         if not noteBegin and v > 0:
             noteBegin = True
@@ -36,15 +37,16 @@ def find_notes( data ):
             noteBegin = False
             nNotes += 1
 
-    return  nNotes, np.vstack( (data, ySum) )
+    return  nNotes, math.log( totalPower )
 
 def main( ):
     infile = sys.argv[1]
     data = cv2.imread( infile, 0 )
     o = 100
     data = data[o:-o,o:-o]
-    nn, data = find_notes( data )
-    print( '%d' % nn )
+    nn, totalP = find_notes( data )
+    print( '%d %.2f' % (nn, totalP) )
+    cv2.imwrite( 'spec.png', data )
 
 if __name__ == '__main__':
     main()
