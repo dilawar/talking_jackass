@@ -38,7 +38,8 @@ while true; do
     #echo -e $STATS 
     #echo -e $STATS | grep -oP "RMS\s+\w+\s+\S+\s+\S+" || echo "failed #to grep"
     RMS_LEVEL=`echo -e $STATS | grep -oP "RMS lev dB\s+\K\S+"`
-    if [ "$RMS_LEVEL" -lt -30 ]; then
+    ST=`echo "$RMS_LEVEL < -30" | bc`
+    if [ $ST -eq 1 ]; then
         notify-send "Too loud.. Trigger jackass."
     fi
 done
