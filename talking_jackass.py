@@ -54,6 +54,10 @@ def main( ):
             with open( '/tmp/mic_power', 'w' ) as f:
                 f.write( power )
 
+            with open( '/var/run/log/jackass.csv', 'a' ) as f:
+                stamp = datetime.datetime.now().isoformat( )
+                f.write( '%s,%s\n' % (stamp, power ) )
+
 
     except KeyboardInterrupt as e:
         print( "keyboad interrupt" )
