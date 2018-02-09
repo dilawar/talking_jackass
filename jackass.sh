@@ -32,16 +32,16 @@ while true; do
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
     echo "Done removing noise -> $FILTERED_FILE"
-    ./extract_notes.py $FILTERED_FILE
+    #./extract_notes.py $FILTERED_FILE
     
     ## spectogram
-    #STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram stats 2>&1)
-    ##echo -e $STATS 
-    ##echo -e $STATS | grep -oP "RMS\s+\w+\s+\S+\s+\S+" || echo "failed #to grep"
-    #RMS_LEVEL=`echo -e $STATS | grep -oP "RMS lev dB\s+\K\S+"`
-    #ST=`echo "$RMS_LEVEL > -30" | bc`
-    #echo $RMS_LEVEL, $ST
-    #if [ $ST -eq 1 ]; then
-    #    notify-send "Too loud.. Trigger jackass."
-    #fi
+    STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram stats 2>&1)
+    #echo -e $STATS 
+    #echo -e $STATS | grep -oP "RMS\s+\w+\s+\S+\s+\S+" || echo "failed #to grep"
+    RMS_LEVEL=`echo -e $STATS | grep -oP "RMS lev dB\s+\K\S+"`
+    ST=`echo "$RMS_LEVEL > -30" | bc`
+    echo $RMS_LEVEL, $ST
+    if [ $ST -eq 1 ]; then
+        notify-send "Too loud.. Trigger jackass."
+    fi
 done
