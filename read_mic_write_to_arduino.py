@@ -42,7 +42,7 @@ def main( ):
                 val = record( frameT )
                 power = compute_power( val )
                 output = 'P' if power > 60 else '.'
-                print( power, output )
+                print( power )
                 ser.write( output.encode( ) )
                 time.sleep( 10 )
             else:
