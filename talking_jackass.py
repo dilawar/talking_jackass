@@ -41,7 +41,7 @@ def main( ):
             if h.hour > 8 and h.hour < 19:
                 val = record( frameT )
                 power = compute_power( val )
-                output = 'P' if power > 60 else '.'
+                output = 'P' if power > 50 else '.'
                 print( power )
                 ser.write( output.encode( ) )
                 time.sleep( 10 )
