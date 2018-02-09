@@ -56,7 +56,7 @@ def main( ):
 
             with open( '/var/run/log/jackass.csv', 'a' ) as f:
                 stamp = datetime.datetime.now().isoformat( )
-                f.write( '%s,%s\n' % (stamp, power ) )
+                f.write( '%s,%f\n' % (stamp, power ) )
 
 
     except KeyboardInterrupt as e:
