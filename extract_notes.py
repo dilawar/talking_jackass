@@ -26,10 +26,7 @@ def find_notes( data ):
 
     # Now walk in time and check if note is there.
     ySum = np.sum( data, axis = 0 )
-    totalPower = np.sum( ySum )
-
     noteBegin = False
-
     for i, v in enumerate( ySum ):
         if not noteBegin and v > 0:
             noteBegin = True
@@ -37,7 +34,7 @@ def find_notes( data ):
             noteBegin = False
             nNotes += 1
 
-    return  nNotes, math.log( totalPower )
+    return  nNotes, math.log( 1 + np.sum(ySum) )
 
 def main( ):
     infile = sys.argv[1]
@@ -46,7 +43,6 @@ def main( ):
     data = data[o:-o,o:-o]
     nn, totalP = find_notes( data )
     print( '%d %.2f' % (nn, totalP) )
-    cv2.imwrite( 'spec.png', data )
 
 if __name__ == '__main__':
     main()

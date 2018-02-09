@@ -46,10 +46,12 @@ while true; do
     ##     notify-send "Too loud.. Trigger jackass."
     ## fi
 
-    nNotes=$(./extract_notes.py ./spectrogram.png)
-    echo $nNotes
+    OUT=$(./extract_notes.py ./spectrogram.png)
+    nNotes=$(echo $OUT | cut -d' ' -f 1)
+    power=$(echo $OUT | cut -d' ' -f 2)
+    echo "Notes: $nNotes Power: $power"
 
     if [ $nNotes -gt 10 ]; then
-        notify-send "Too many notes: $nNotes. Trigger?"
+        notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
     fi
 done
