@@ -32,9 +32,8 @@ while true; do
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
     echo "Done removing noise -> $FILTERED_FILE"
-    #./extract_notes.py $FILTERED_FILE
-    
-    ## spectogram
+
+    # Create spectogram. We'll use cv2 to extract notes and power from image.
     STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram stats 2>&1)
 
     ## #echo -e $STATS 
