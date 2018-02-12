@@ -26,6 +26,8 @@ OUTFILE=/tmp/rec.wav
 DURATION=10
 NOISE_PROFILE=./noise_slc.prof
 DATADIR=$HOME/Work/DATA/JACKASS
+CACHEDIR=$HOME/.config/jackass
+mkdir -p $CACHEDIR
 
 while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
@@ -52,6 +54,7 @@ while true; do
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
     echo "Notes: $nNotes Power: $power"
+    echo "$nNotes,$power" > $CACHEDIR/mic
 
     if [ $nNotes -gt 10 ]; then
         notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
