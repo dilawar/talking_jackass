@@ -43,6 +43,7 @@ def main( ):
     data = data[o:-o,o:-o]
     nn, totalP = find_notes( data )
     print( '%d %d' % (nn, totalP) )
+    cv2.imwrite( './processed.png', data )
 
 if __name__ == '__main__':
     main()

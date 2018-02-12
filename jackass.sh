@@ -25,6 +25,7 @@ set -e
 OUTFILE=/tmp/rec.wav
 DURATION=10
 NOISE_PROFILE=./noise_slc.prof
+DATADIR=$HOME/Work/DATA/JACKASS
 
 while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
@@ -33,8 +34,10 @@ while true; do
     sox $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
     echo "Done removing noise -> $FILTERED_FILE"
 
+    NOW=$(date +"%Y_%m_%d__%H_%M_%S")
+    SPECFILE="$DATADIR/spec_$NOW.png"
     # Create spectogram. We'll use cv2 to extract notes and power from image.
-    STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram stats 2>&1)
+    STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram -o $SPECFILE stats 2>&1)
 
     ## #echo -e $STATS 
     ## #echo -e $STATS | grep -oP "RMS\s+\w+\s+\S+\s+\S+" || echo "failed #to grep"
