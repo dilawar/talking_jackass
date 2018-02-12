@@ -20,8 +20,6 @@
 set -o nounset                                  # Treat unset variables as an error
 set -e
 
-# record 5 sec into current directory.
-
 OUTFILE=/tmp/rec.wav
 DURATION=20
 NOISE_PROFILE=./noise_slc.prof
@@ -33,7 +31,7 @@ while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
-    sox $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
+    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
     echo "Done removing noise -> $FILTERED_FILE"
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
@@ -50,7 +48,8 @@ while true; do
     ##     notify-send "Too loud.. Trigger jackass."
     ## fi
 
-    OUT=$(./extract_notes.py ./spectrogram.png)
+    OUT=$(./extract_notes.py $SPECFILE)
+    echo $OUT
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
     echo "Notes: $nNotes Power: $power"

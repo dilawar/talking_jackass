@@ -33,17 +33,16 @@ def find_notes( data ):
         elif noteBegin and v == 0:
             noteBegin = False
             nNotes += 1
+    data = np.vstack((data, ySum ))
+    return  nNotes, int(math.log( 1 + np.sum(ySum))), data
 
-    return  nNotes, int(math.log( 1 + np.sum(ySum)))
-
-def main( ):
-    infile = sys.argv[1]
+def main( infile ):
     data = cv2.imread( infile, 0 )
     o = 100
     data = data[o:-o,o:-o]
-    nn, totalP = find_notes( data )
+    nn, totalP, data = find_notes( data )
     print( '%d %d' % (nn, totalP) )
     cv2.imwrite( './processed.png', data )
 
 if __name__ == '__main__':
-    main()
+    main( sys.argv[1] )
