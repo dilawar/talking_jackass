@@ -23,7 +23,7 @@ set -e
 # record 5 sec into current directory.
 
 OUTFILE=/tmp/rec.wav
-DURATION=10
+DURATION=20
 NOISE_PROFILE=./noise_slc.prof
 DATADIR=$HOME/Work/DATA/JACKASS
 CACHEDIR=$HOME/.cache/jackass
@@ -56,7 +56,7 @@ while true; do
     echo "Notes: $nNotes Power: $power"
     echo "$nNotes,$power" > $CACHEDIR/mic
 
-    if [ $nNotes -gt 10 ]; then
+    if [ $nNotes -gt 20 ]; then
         notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
     fi
 done
