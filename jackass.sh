@@ -26,7 +26,7 @@ OUTFILE=/tmp/rec.wav
 DURATION=10
 NOISE_PROFILE=./noise_slc.prof
 DATADIR=$HOME/Work/DATA/JACKASS
-CACHEDIR=$HOME/.config/jackass
+CACHEDIR=$HOME/.cache/jackass
 mkdir -p $CACHEDIR
 
 while true; do
