@@ -1,1 +1,0 @@
-/home1/dilawars/Scripts/trigger_jackass.py
