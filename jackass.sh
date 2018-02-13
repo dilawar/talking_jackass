@@ -28,7 +28,7 @@ CACHEDIR=$HOME/.cache/jackass
 mkdir -p $CACHEDIR
 
 SERIAL_PORT=/dev/ttyACM0
-stty -F $SERIAL_PORT raw speed 3800
+stty -F $SERIAL_PORT raw speed 38400
 
 while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
@@ -58,8 +58,14 @@ while true; do
     echo "Notes: $nNotes Power: $power"
     echo "$nNotes,$power" > $CACHEDIR/mic
 
-    if [ $nNotes -gt 20 ]; then
-        notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
-        echo "A" > $SERIAL_PORT
+    if [ $nNotes -gt 19 ]; then
+        if [ $power -gt 5 ]; then
+            notify-send "Noise  ($nNotes) with power ($power)."
+            echo "A" > $SERIAL_PORT
+            if [ $nNotes > 25 ]; then
+                notify-send "JackAss  ($nNotes) with power ($power)."
+                echo "P" > $SERIAL_PORT
+            fi
+        fi
     fi
 done
