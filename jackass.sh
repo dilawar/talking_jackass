@@ -57,5 +57,6 @@ while true; do
 
     if [ $nNotes -gt 20 ]; then
         notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
+        ./trigger_jackass.py 'A'
     fi
 done
