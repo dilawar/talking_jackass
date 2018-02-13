@@ -31,6 +31,17 @@ SERIAL_PORT=/dev/ttyACM0
 stty -F $SERIAL_PORT raw speed 38400
 
 while true; do
+
+    # Dont record in non-working hours.
+    HOUR=$(date +"%H")
+    if [ $HOUR -lt 8 ]; then 
+        if [ $HOUR -gt 18 ]; then
+            echo "Non-working hours"
+            sleep 100;
+            continue
+        fi
+    fi
+
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
