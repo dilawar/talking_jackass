@@ -70,7 +70,7 @@ while true; do
     echo "$nNotes,$power" > $CACHEDIR/mic
 
     if [ $nNotes -gt 19 ]; then
-        if [ $power -gt 5 ]; then
+        if [ $power -gt 4 ]; then
             notify-send "Noise  ($nNotes) with power ($power)."
             echo "A" > $SERIAL_PORT
             if [ $nNotes -gt 24 ]; then
