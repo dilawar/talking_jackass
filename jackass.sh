@@ -27,6 +27,9 @@ DATADIR=$HOME/Work/DATA/JACKASS
 CACHEDIR=$HOME/.cache/jackass
 mkdir -p $CACHEDIR
 
+SERIAL_PORT=/dev/ttyACM0
+stty -F $SERIAL_PORT raw speed 3800
+
 while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
@@ -57,6 +60,6 @@ while true; do
 
     if [ $nNotes -gt 20 ]; then
         notify-send "Too many notes ($nNotes) with power ($power). Trigger?"
-        ./trigger_jackass.py 'A'
+        echo "A" > $SERIAL_PORT
     fi
 done
