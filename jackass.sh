@@ -62,7 +62,7 @@ while true; do
         if [ $power -gt 5 ]; then
             notify-send "Noise  ($nNotes) with power ($power)."
             echo "A" > $SERIAL_PORT
-            if [ $nNotes > 25 ]; then
+            if [ $nNotes -gt 24 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
             fi
