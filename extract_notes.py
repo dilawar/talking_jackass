@@ -25,7 +25,8 @@ def find_notes( data ):
     data[ data < u + 2*s ] = 0
 
     # Now walk in time and check if note is there.
-    ySum = np.sum( data, axis = 0 )
+    ySum = np.mean( data, axis = 0 )
+    timeN = len( ySum ) / 8000
     noteBegin = False
     for i, v in enumerate( ySum ):
         if not noteBegin and v > 0:

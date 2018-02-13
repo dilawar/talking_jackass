@@ -79,5 +79,9 @@ void loop()
             Serial.println( "Play notes" );
             play( );
         }
+        else if( incoming == 65 ) 
+        {
+            playNote( 'a', 80 );
+        }
     }
 }
