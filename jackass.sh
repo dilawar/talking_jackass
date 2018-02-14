@@ -97,7 +97,11 @@ while true; do
                 log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
                 cp $SPECFILE $CACHEDIR/POSITIVES_STRONG
+                sleep 30s
+            else
+                sleep 5s
             fi
+
         fi
     fi
 done
