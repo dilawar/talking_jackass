@@ -49,7 +49,7 @@ while true; do
         continue
     fi
 
-    IDLE_FOR=$(xprintidle)
+    IDLE_FOR=$(sudo -u dilawars xprintidle)
     if [ "$IDLE_FOR" -gt 300000 ]; then
         log "Idle for a 5 minutes" 
     fi
@@ -58,7 +58,7 @@ while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
-    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
+    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.33
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
     SPECFILE="$DATADIR/spec_$NOW.png"
