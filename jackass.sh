@@ -50,9 +50,9 @@ while true; do
     fi
 
     IDLE_FOR=$(sudo -u dilawars xprintidle)
-    if [ "$IDLE_FOR" -gt 180000 ]; then
-        log "Been idle for more than 3 minutes. Doing nothing." 
-        sleep 120
+    if [ "$IDLE_FOR" -gt 120000 ]; then
+        log "Been idle for more than 2 minutes. Doing nothing." 
+        sleep 60s
     fi
 
  
