@@ -43,7 +43,7 @@ while true; do
     fi
 
     # If screen is locked, do nothing.
-    $XSCREENSAVER_STATE=$(xscreensaver-command -time)
+    XSCREENSAVER_STATE=$(xscreensaver-command -time)
     if [[ $XSCREENSAVER_STATE = *"locked since"* ]]; then
         echo "Screen is locked. Continuing"
         continue
