@@ -25,10 +25,16 @@ DURATION=20
 NOISE_PROFILE=./noise_slc.prof
 DATADIR=$HOME/Work/DATA/JACKASS
 CACHEDIR=$HOME/.cache/jackass
+
 mkdir -p $CACHEDIR
 
 SERIAL_PORT=/dev/ttyACM0
 stty -F $SERIAL_PORT raw speed 38400
+
+function log 
+{
+    echo "$1" | tee -a $HOME/.cache/jackass/jackass.log 
+}
 
 while true; do
 
@@ -36,16 +42,16 @@ while true; do
     HOUR=$(date +"%H")
     if [ $HOUR -lt 8 ]; then 
         if [ $HOUR -gt 18 ]; then
-            echo "Non-working hours"
+            log "Non-working hours"
             sleep 100
             continue
         fi
     fi
 
     # If screen is locked, do nothing.
-    XSCREENSAVER_STATE=$(xscreensaver-command -time)
-    if [[ $XSCREENSAVER_STATE = *"locked since"* ]]; then
-        echo "Screen is locked. Continuing"
+    XSCREENSAVER_STATE=$(xscreensaver-command -time || echo "Could not get status")
+    if [[ "$XSCREENSAVER_STATE" = *"locked since"* ]]; then
+        log "Screen is locked. Continuing"
         continue
     fi
 
@@ -53,7 +59,7 @@ while true; do
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
-    echo "Done removing noise -> $FILTERED_FILE"
+    log "Done removing noise -> $FILTERED_FILE"
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
     SPECFILE="$DATADIR/spec_$NOW.png"
@@ -73,15 +79,18 @@ while true; do
     echo $OUT
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
-    echo "Notes: $nNotes Power: $power"
-    echo "$nNotes,$power" > $CACHEDIR/mic
+
+    log "Notes: $nNotes Power: $power"
+    log "$nNotes,$power" > $CACHEDIR/mic
 
     if [ $nNotes -gt 19 ]; then
         if [ $power -gt 4 ]; then
+            log "Noise  ($nNotes) with power ($power)."
             notify-send "Noise  ($nNotes) with power ($power)."
             echo "A" > $SERIAL_PORT
             if [ $nNotes -gt 24 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
+                log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
             fi
         fi
