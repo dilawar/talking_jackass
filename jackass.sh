@@ -37,9 +37,16 @@ while true; do
     if [ $HOUR -lt 8 ]; then 
         if [ $HOUR -gt 18 ]; then
             echo "Non-working hours"
-            sleep 100;
+            sleep 100
             continue
         fi
+    fi
+
+    # If screen is locked, do nothing.
+    $XSCREENSAVER_STATE=$(xscreensaver-command -time)
+    if [[ $XSCREENSAVER_STATE = *"locked since"* ]]; then
+        echo "Screen is locked. Continuing"
+        continue
     fi
 
     arecord -d $DURATION -t wav -c 1 $OUTFILE
