@@ -92,7 +92,7 @@ while true; do
             notify-send "Noise  ($nNotes) with power ($power)."
             echo "A" > $SERIAL_PORT
             cp $SPECFILE $CACHEDIR/POSITIVES/
-            if [ $nNotes -gt 24 ]; then
+            if [ $nNotes -gt 30 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
                 log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
