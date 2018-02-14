@@ -44,14 +44,15 @@ while true; do
     HOUR=$(date +"%H")
     # What a complicated way to doing arithmatic in bash.
     if [ $((10#"$HOUR")) -lt 9 ] || [ $((10#"$HOUR")) -gt 18 ]; then 
-        log "Non-working hours"
-        sleep 1000
+        log "Non-working hours."
+        sleep 10m
         continue
     fi
 
     IDLE_FOR=$(sudo -u dilawars xprintidle)
     if [ "$IDLE_FOR" -gt 300000 ]; then
-        log "Idle for a 5 minutes" 
+        log "Been idle for more than 5 minutes. Doing nothing." 
+        sleep 120
     fi
 
 
