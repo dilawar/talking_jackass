@@ -33,33 +33,31 @@ stty -F $SERIAL_PORT raw speed 38400
 
 function log 
 {
-    echo "$1" | tee -a $HOME/.cache/jackass/jackass.log 
+    NOW=$(date +"%Y_%m_%d__%H_%M_%S")
+    echo "$NOW: $1" | tee -a $HOME/.cache/jackass/jackass.log 
 }
 
 while true; do
 
     # Dont record in non-working hours.
     HOUR=$(date +"%H")
-    log "Hour is $HOUR"
     # What a complicated way to doing arithmatic in bash.
     if [ $((10#"$HOUR")) -lt 9 ] || [ $((10#"$HOUR")) -gt 18 ]; then 
         log "Non-working hours"
-        sleep 10
+        sleep 1000
         continue
     fi
 
-    # If screen is locked, do nothing.
-    XSCREENSAVER_STATE=$(xscreensaver-command -time || echo "Could not get status")
-    if [[ "$XSCREENSAVER_STATE" = *"locked since"* ]]; then
-        log "Screen is locked. Continuing"
-        continue
+    IDLE_FOR=$(xprintidle)
+    if [ "$IDLE_FOR" -gt 300000 ]; then
+        log "Idle for a 5 minutes" 
     fi
+
 
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
-    log "Done removing noise -> $FILTERED_FILE"
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
     SPECFILE="$DATADIR/spec_$NOW.png"
@@ -76,12 +74,13 @@ while true; do
     ## fi
 
     OUT=$(./extract_notes.py $SPECFILE)
-    echo $OUT
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
 
     log "Notes: $nNotes Power: $power"
-    log "$nNotes,$power" > $CACHEDIR/mic
+
+    # Write to temp file for conky to read.
+    echo "$nNotes,$power" > $CACHEDIR/mic
 
     if [ $nNotes -gt 19 ]; then
         if [ $power -gt 4 ]; then
