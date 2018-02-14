@@ -56,7 +56,7 @@ while true; do
     fi
 
 
-    arecord -d $DURATION -t wav -c 1 $OUTFILE
+    arecord -f S16_LE -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
     sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.33
