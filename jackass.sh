@@ -40,12 +40,12 @@ while true; do
 
     # Dont record in non-working hours.
     HOUR=$(date +"%H")
-    if [ $HOUR -lt 8 ]; then 
-        if [ $HOUR -gt 18 ]; then
-            log "Non-working hours"
-            sleep 100
-            continue
-        fi
+    log "Hour is $HOUR"
+    # What a complicated way to doing arithmatic in bash.
+    if [ $((10#"$HOUR")) -lt 10 ] || [ $((10#"$HOUR")) -gt 18 ]; then 
+        log "Non-working hours"
+        sleep 10
+        continue
     fi
 
     # If screen is locked, do nothing.
