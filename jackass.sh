@@ -42,7 +42,7 @@ while true; do
     HOUR=$(date +"%H")
     log "Hour is $HOUR"
     # What a complicated way to doing arithmatic in bash.
-    if [ $((10#"$HOUR")) -lt 10 ] || [ $((10#"$HOUR")) -gt 18 ]; then 
+    if [ $((10#"$HOUR")) -lt 9 ] || [ $((10#"$HOUR")) -gt 18 ]; then 
         log "Non-working hours"
         sleep 10
         continue
