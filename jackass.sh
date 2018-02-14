@@ -27,6 +27,7 @@ DATADIR=$HOME/Work/DATA/JACKASS
 CACHEDIR=$HOME/.cache/jackass
 
 mkdir -p $CACHEDIR
+mkdir -p $CACHEDIR/{POSITIVES_STRONG,POSITIVES}
 
 SERIAL_PORT=/dev/ttyACM0
 stty -F $SERIAL_PORT raw speed 38400
@@ -87,10 +88,12 @@ while true; do
             log "Noise  ($nNotes) with power ($power)."
             notify-send "Noise  ($nNotes) with power ($power)."
             echo "A" > $SERIAL_PORT
+            cp $SPECFILE $CACHEDIR/POSITIVES/
             if [ $nNotes -gt 24 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
                 log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
+                cp $SPECFILE $CACHEDIR/POSITIVES_STRONG
             fi
         fi
     fi
