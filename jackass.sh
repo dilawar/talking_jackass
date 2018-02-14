@@ -50,16 +50,18 @@ while true; do
     fi
 
     IDLE_FOR=$(sudo -u dilawars xprintidle)
-    if [ "$IDLE_FOR" -gt 300000 ]; then
-        log "Been idle for more than 5 minutes. Doing nothing." 
+    if [ "$IDLE_FOR" -gt 180000 ]; then
+        log "Been idle for more than 3 minutes. Doing nothing." 
         sleep 120
     fi
 
-
-    arecord -f S16_LE -d $DURATION -t wav -c 1 $OUTFILE
+ 
+    # Everything breaks down with signed data.
+    # arecord -f S16_LE -d $DURATION -t wav -c 1 $OUTFILE
+    arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
-    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.33
+    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.35
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
     SPECFILE="$DATADIR/spec_$NOW.png"
