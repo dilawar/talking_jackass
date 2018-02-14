@@ -57,7 +57,7 @@ while true; do
     arecord -d $DURATION -t wav -c 1 $OUTFILE
     # now remove noise.
     FILTERED_FILE=$OUTFILE.filtered.wav
-    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.4
+    sox -v 0.99 $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.3
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
     SPECFILE="$DATADIR/spec_$NOW.png"
