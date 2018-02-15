@@ -68,15 +68,6 @@ while true; do
     # Create spectogram. We'll use cv2 to extract notes and power from image.
     STATS=$(sox $FILTERED_FILE -n rate 6k spectrogram -o $SPECFILE stats 2>&1)
 
-    ## #echo -e $STATS 
-    ## #echo -e $STATS | grep -oP "RMS\s+\w+\s+\S+\s+\S+" || echo "failed #to grep"
-    ## RMS_LEVEL=`echo -e $STATS | grep -oP "RMS lev dB\s+\K\S+"`
-    ## ST=`echo "$RMS_LEVEL > -30" | bc`
-    ## echo $RMS_LEVEL, $ST
-    ## if [ $ST -eq 1 ]; then
-    ##     notify-send "Too loud.. Trigger jackass."
-    ## fi
-
     OUT=$(./extract_notes.py $SPECFILE)
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
