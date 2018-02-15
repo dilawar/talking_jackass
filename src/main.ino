@@ -83,5 +83,9 @@ void loop()
         {
             playNote( 'a', 80 );
         }
+        else if( incoming == 66 ) 
+        {
+            playNote( 'b', 20 );
+        }
     }
 }
