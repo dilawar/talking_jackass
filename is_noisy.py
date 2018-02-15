@@ -18,12 +18,12 @@ import numpy as np
 import cv2
 import math
 
-def find_notes( data ):
+def find_notes( spec ):
+    data = spec.copy( )
     nNotes = 0
     u = data.mean( )
     s = data.std( )
     data[ data <= u + 2*s ] = 0
-
     # Now walk in time and check if note is there.
     ySum = np.mean( data, axis = 0 )
     timeN = len( ySum ) / 8000
@@ -46,16 +46,31 @@ def find_notes( data ):
                 allPower += math.log( power )
             nNotes += 1
 
-    data = np.vstack((data, ySum ))
-    return  nNotes, allPower, data
+    #data = np.vstack((data, ySum ))
+    # Find edges.
+    edges = cv2.Canny( data, u, u + s)
+    data[ data > u + 2*s ] = 255
+    im2, contours, hierarchy = cv2.findContours( data, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    return  nNotes, allPower, data, contours
 
 def main( infile ):
-    data = cv2.imread( infile, 0 )
+    spec = cv2.imread( infile, 0 )
     o = 100
-    data = data[o:-o,o:-o]
-    nn, totalP, data = find_notes( data )
+    spec = spec[o:-o,o:-o]
+    spec = cv2.bilateralFilter( spec, 11, 20, 20 )
+    nn, totalP, data, cnts = find_notes( spec )
+    img = np.zeros_like( data )
+    for c in cnts:
+        if len( c ) > 5:
+            ellipse = cv2.fitEllipse(c)
+            area = cv2.contourArea( c )
+            if area > 80 or area < 10:
+                pass
+            else:
+                cv2.ellipse(img, ellipse, 255, 1)
+
     print( '%d %d' % (nn, totalP) )
-    cv2.imwrite( './spectrogram1_processed.png', data )
+    cv2.imwrite( './spectrogram1_processed.png', np.vstack((spec,img)) )
 
 if __name__ == '__main__':
     main( sys.argv[1] )

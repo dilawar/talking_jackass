@@ -64,9 +64,5 @@ while true; do
     sox $FILTERED_FILE -n spectrogram -m -o $SPECFILE 
 
     OUT=$(python ./is_noisy.py $SPECFILE)
-    nNotes=$(echo $OUT | cut -d' ' -f 1)
-    power=$(echo $OUT | cut -d' ' -f 2)
-
-    log "Notes: $nNotes Power: $power"
-
+    echo $OUT
 done
