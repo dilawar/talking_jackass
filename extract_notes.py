@@ -38,8 +38,7 @@ def find_notes( data ):
             noteBegin = False
             noteI.append( i )
             power = sum(ySum[noteI[0]:noteI[1]])
-            if math.log( power ) > 3:
-                print( 'Too noisy. Most likely intruments' )
+            if math.log( power ) > 2.5:
                 noteI = [ ]
                 continue
             else:
