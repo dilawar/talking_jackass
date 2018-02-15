@@ -77,10 +77,10 @@ while true; do
     # Write to temp file for conky to read.
     echo "$nNotes,$power" > $CACHEDIR/mic
 
-    if [ $nNotes -gt 13 ] && [ $power -gt 12 ]; then
-        echo "B" > $SERIAL_PORT
-        sleep 4s
-    fi
+    ## if [ $nNotes -gt 13 ] && [ $power -gt 12 ]; then
+    ##     echo "B" > $SERIAL_PORT
+    ##     sleep 4s
+    ## fi
 
     if [ $nNotes -gt 19 ]; then
         if [ $power -gt 15 ]; then
