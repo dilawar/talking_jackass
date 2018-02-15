@@ -77,6 +77,10 @@ while true; do
     # Write to temp file for conky to read.
     echo "$nNotes,$power" > $CACHEDIR/mic
 
+    if [ $nNotes -gt 9 ]; then
+        echo "B" > $SERIAL_PORT
+    fi
+
     if [ $nNotes -gt 19 ]; then
         if [ $power -gt 4 ]; then
             log "Noise  ($nNotes) with power ($power)."
