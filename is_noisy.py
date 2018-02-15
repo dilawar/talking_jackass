@@ -22,7 +22,7 @@ def find_notes( data ):
     nNotes = 0
     u = data.mean( )
     s = data.std( )
-    data[ data < u + 2*s ] = 0
+    data[ data < u + 1.5*s ] = 0
 
     # Now walk in time and check if note is there.
     ySum = np.mean( data, axis = 0 )

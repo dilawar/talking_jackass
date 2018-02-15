@@ -57,7 +57,7 @@ while true; do
     sox  $OUTFILE $FILTERED_FILE noisered $NOISE_PROFILE 0.21
 
     NOW=$(date +"%Y_%m_%d__%H_%M_%S")
-    SPECFILE="./spectrogram.png"
+    SPECFILE="./spectrogram1.png"
 
     # Create spectrogram.
     # -m : create monochromatic spectrogram.
