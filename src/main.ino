@@ -85,7 +85,7 @@ void loop()
         }
         else if( incoming == 66 ) 
         {
-            playNote( 'b', 20 );
+            playNote( 'b', 5 );
         }
     }
 }
