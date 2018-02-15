@@ -80,19 +80,18 @@ while true; do
     if [ $nNotes -gt 19 ]; then
         if [ $power -gt 4 ]; then
             log "Noise  ($nNotes) with power ($power)."
-            notify-send "Noise  ($nNotes) with power ($power)."
-            echo "A" > $SERIAL_PORT
-            cp $SPECFILE $CACHEDIR/POSITIVES/
             if [ $nNotes -gt 35 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
                 log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
-                cp $SPECFILE $CACHEDIR/POSITIVES_STRONG
+                mv $SPECFILE $CACHEDIR/POSITIVES_STRONG/
                 sleep 30s
             else
+                notify-send "Noise  ($nNotes) with power ($power)."
+                echo "A" > $SERIAL_PORT
+                mv $SPECFILE $CACHEDIR/POSITIVES/
                 sleep 5s
             fi
-
         fi
     fi
 done

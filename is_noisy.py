@@ -22,7 +22,7 @@ def find_notes( data ):
     nNotes = 0
     u = data.mean( )
     s = data.std( )
-    data[ data < u + 1.5*s ] = 0
+    data[ data <= u + 2*s ] = 0
 
     # Now walk in time and check if note is there.
     ySum = np.mean( data, axis = 0 )
@@ -44,7 +44,6 @@ def find_notes( data ):
             else:
                 noteI = [ ]
                 allPower += math.log( power )
-
             nNotes += 1
 
     data = np.vstack((data, ySum ))
@@ -56,7 +55,7 @@ def main( infile ):
     data = data[o:-o,o:-o]
     nn, totalP, data = find_notes( data )
     print( '%d %d' % (nn, totalP) )
-    cv2.imwrite( './processed.png', data )
+    cv2.imwrite( './spectrogram1_processed.png', data )
 
 if __name__ == '__main__':
     main( sys.argv[1] )
