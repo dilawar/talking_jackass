@@ -28,14 +28,28 @@ def find_notes( data ):
     ySum = np.mean( data, axis = 0 )
     timeN = len( ySum ) / 8000
     noteBegin = False
+    noteI = [ ]
+    allPower = 0
     for i, v in enumerate( ySum ):
         if not noteBegin and v > 0:
             noteBegin = True
+            noteI.append( i )
         elif noteBegin and v == 0:
             noteBegin = False
+            noteI.append( i )
+            power = sum(ySum[noteI[0]:noteI[1]])
+            if math.log( power ) > 3:
+                print( 'Too noisy. Most likely intruments' )
+                noteI = [ ]
+                continue
+            else:
+                noteI = [ ]
+                allPower += math.log( power )
+
             nNotes += 1
+
     data = np.vstack((data, ySum ))
-    return  nNotes, int(math.log( 1 + np.sum(ySum))), data
+    return  nNotes, allPower, data
 
 def main( infile ):
     data = cv2.imread( infile, 0 )
