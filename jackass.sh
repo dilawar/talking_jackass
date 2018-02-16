@@ -82,10 +82,10 @@ while true; do
     ##     sleep 4s
     ## fi
 
-    if [ $nNotes -gt 19 ]; then
-        if [ $power -gt 15 ]; then
+    if [ $nNotes -gt 9 ]; then
+        if [ $power -gt 20 ]; then
             log "Noise  ($nNotes) with power ($power)."
-            if [ $nNotes -gt 35 ]; then
+            if [ $nNotes -gt 15 ]; then
                 notify-send "JackAss  ($nNotes) with power ($power)."
                 log "JackAss  ($nNotes) with power ($power)."
                 echo "P" > $SERIAL_PORT
