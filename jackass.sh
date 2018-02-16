@@ -72,11 +72,10 @@ while true; do
     OUT=$(./extract_notes.py $SPECFILE)
     nNotes=$(echo $OUT | cut -d' ' -f 1)
     power=$(echo $OUT | cut -d' ' -f 2)
-
-    log "Notes: $nNotes Power: $power"
+    log "OUTPUT: $OUT"
 
     # Write to temp file for conky to read.
-    echo "$nNotes,$power" > $CACHEDIR/mic
+    echo "$OUT" > $CACHEDIR/mic
 
     ## if [ $nNotes -gt 13 ] && [ $power -gt 12 ]; then
     ##     echo "B" > $SERIAL_PORT
