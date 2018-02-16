@@ -53,6 +53,7 @@ while true; do
     if [ "$IDLE_FOR" -gt 120000 ]; then
         log "Been idle for more than 2 minutes. Doing nothing." 
         sleep 60s
+        continue
     fi
 
  
