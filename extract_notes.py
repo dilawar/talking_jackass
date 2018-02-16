@@ -54,7 +54,7 @@ def main( infile ):
     o = 100
     data = data[o:-o,o:-o]
     nn, totalP, yvec, data = find_notes( data )
-    avgL = len(yvec[ yvec > yvec.mean( )])/len(yvec)
+    avgL = float(len(yvec[ yvec > 0]))/len(yvec)
     nn = nn * avgL
     print( '%d %d %.2f' % (nn, totalP, avgL ) )
     cv2.imwrite( './processed.png', data )
